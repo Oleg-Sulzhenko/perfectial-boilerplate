@@ -5,11 +5,11 @@ var gulp = require('gulp'),
     watch = require('gulp-watch'),
     autoprefixer = require('gulp-autoprefixer'),
 
+    sourcemaps = require('gulp-sourcemaps'),
+
     livereload = require('gulp-livereload'),
     connect = require('gulp-connect'); // or BrowserSync  ?
 
-
-    //gulp-sourcemaps
 
     //gulp-imagemin
     //gulp-svgmin
@@ -22,9 +22,6 @@ var gulp = require('gulp'),
 
 
 
-
-
-
 gulp.task('connect', function() {
   connect.server({
     root: '',
@@ -33,11 +30,13 @@ gulp.task('connect', function() {
 });
 
 gulp.task('sass', function() {
-  var statick = gulp.src('./css/sass/style.scss')
-      .pipe(sass().on('error', sass.logError))
-      .pipe(autoprefixer('last 20 versions'))
-      .pipe(gulp.dest('./css'))
-      .pipe(connect.reload());
+  return gulp.src('./css/sass/style.scss')
+    .pipe(sourcemaps.init())
+    .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer('last 20 versions'))
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(gulp.dest('./css'))
+    .pipe(connect.reload());
 });
 
 gulp.task('watch', function(){
